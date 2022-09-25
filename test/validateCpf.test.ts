@@ -1,7 +1,7 @@
 import { validateCpf } from "../src/cpf";
 
 test('Quando o número for valido, retorna true', function () {
-	const cpfIsValid = validateCpf('43545679896');
+	const cpfIsValid = validateCpf('19361862170');
 	expect(cpfIsValid).toBeTruthy();
 });
 
