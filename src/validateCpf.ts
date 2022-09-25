@@ -1,61 +1,47 @@
-// @ts-nocheck
-export function validate(str) {
+const CPF_MAX_SIZE = 14;
+const CPF_MIN_SIZE = 11;
 
-	if (str !== null) {
-		if (str !== undefined) {
-			if (str.length >= 11 || str.length <= 14) {
-
-				str = str
-					.replace('.', '')
-					.replace('.', '')
-					.replace('-', '')
-					.replace(" ", "");
-
-				if (!str.split("").every(c => c === str[0])) {
-					try {
-						let d1, d2;
-						let dg1, dg2, rest;
-						let digito;
-						let nDigResult;
-						d1 = d2 = 0;
-						dg1 = dg2 = rest = 0;
-
-						for (let nCount = 1; nCount < str.length - 1; nCount++) {
-							// if (isNaN(parseInt(str.substring(nCount -1, nCount)))) {
-							// 	return false;
-							// } else {
-
-							digito = parseInt(str.substring(nCount - 1, nCount));
-							d1 = d1 + (11 - nCount) * digito;
-
-							d2 = d2 + (12 - nCount) * digito;
-							// }
-						};
-
-						rest = (d1 % 11);
-
-						dg1 = (rest < 2) ? dg1 = 0 : 11 - rest;
-						d2 += 2 * dg1;
-						rest = (d2 % 11);
-						if (rest < 2)
-							dg2 = 0;
-						else
-							dg2 = 11 - rest;
-
-						let nDigVerific = str.substring(str.length - 2, str.length);
-						nDigResult = "" + dg1 + "" + dg2;
-						return nDigVerific == nDigResult;
-					} catch (e) {
-						console.error("Erro !" + e);
-
-						return false;
-					}
-				} else return false
-
-			} else return false;
-		}
-
-
-	} else return false;
-
+function formatIsValid(cpf: string) {
+	if (!cpf || cpf.length < CPF_MIN_SIZE || cpf.length > CPF_MAX_SIZE) { throw new Error("Invalid CPF"); }
+	return true;
 }
+
+function parseOnlyNumbers(cpf: string) {
+	return cpf
+		.replace('.', '')
+		.replace('.', '')
+		.replace('-', '')
+		.replace(" ", "");
+};
+
+function calculateModule(value: number, mod: number) { return (value % mod); }
+
+function verificationNumber(value: number) {
+	return (value < 2) ? 0 : 11 - value;
+}
+
+export function validateCpf(cpf: string) {
+	if (!formatIsValid(cpf)) return false;
+	const parsedCPF = parseOnlyNumbers(cpf);
+
+	let verifyFirstDigit: number = 0, verifySecondDigit: number = 0;
+	let iterationDigit: number;
+
+	for (let cpfPosition = 1; cpfPosition < parsedCPF.length - 1; cpfPosition++) {
+		iterationDigit = parseInt(cpf.substring(cpfPosition - 1, cpfPosition));
+		verifyFirstDigit += ((11 - cpfPosition) * iterationDigit);
+		verifySecondDigit += ((12 - cpfPosition) * iterationDigit);
+	}
+
+	let digitTenModule = calculateModule(verifyFirstDigit, 11);
+	const tenDigit = verificationNumber(digitTenModule);
+
+	verifySecondDigit += 2 * tenDigit;
+	const digitElevenModule = calculateModule(verifySecondDigit, 11);
+	const elevenDigit = verificationNumber(digitElevenModule);
+
+	let originalCpfDigits = cpf.substring(cpf.length - 2, cpf.length);
+	let verifiedDigits = `${tenDigit}${elevenDigit}`;
+
+	return originalCpfDigits == verifiedDigits;
+};
