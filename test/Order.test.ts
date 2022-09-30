@@ -7,7 +7,7 @@ describe('Valida a criação de um novo pedido', function () {
 		expect(() => new Order('123.456.798-96')).toThrow(new Error('Invalid CPF'));
 	});
 
-	test('deve criar um pedido com 3 itens', function () {
+	test('deve criar um pedido com 3 itens e calcular o total', function () {
 		const order = new Order('19361862170');
 		order.addItem(new Item(1, 'Mouse', 250), 1);
 		order.addItem(new Item(2, 'Teclado', 450), 1);
@@ -22,7 +22,7 @@ describe('Valida a criação de um novo pedido', function () {
 		expect(total).toBe(0);
 	});
 
-	test('deve ser possível adicionar um cupom de desconto', function () {
+	test('deve criar um pedido com 3 itens e aplicar o cupom de desconto', function () {
 		const order = new Order('19361862170');
 		order.addItem(new Item(1, 'Monitor', 1000), 2);
 		order.addCoupon(new Coupon('10OFF', 10));
