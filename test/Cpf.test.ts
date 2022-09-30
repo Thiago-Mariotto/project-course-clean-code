@@ -1,33 +1,44 @@
 import Cpf from "../src/Cpf";
-import {
-	incompleteCpf,
-	invalidCpf,
-	invalidCpf2,
-	validCpf,
-	validCpfWithChars
-} from "./mocks/cpf.mock";
 
-
-test('Quando o número do CPF for valido, retorna true', function () {
-	const cpf = new Cpf(validCpf);
+test('Valida um CPF', function () {
+	const cpf = new Cpf('19361862170');
 	expect(cpf).toBeTruthy();
 });
 
-test('É possível criar o CPF com ponto e hífen', function () {
-	const cpf = new Cpf(validCpfWithChars);
+test('Valida um CPF completo', function () {
+	const cpf = new Cpf('193.618.621-70');
 	expect(cpf).toBeTruthy();
 });
 
-test('Quando o número for < 11 caracteres ou > 14 caracteres, retorna "Invalid CPF size"', function () {
-	expect(() => new Cpf(invalidCpf)).toThrow('Invalid CPF');
-	expect(() => new Cpf(invalidCpf2)).toThrow('Invalid CPF');
+const equalNumbers = [
+	'111.111.111-11',
+	'222.222.222-22',
+];
+
+test.each(equalNumbers)('Invalida CPF com números iguais', function (cpf) {
+	expect(() => new Cpf(cpf)).toThrow('Invalid CPF');
 });
 
-test('Quando o número for undefined/null retorna "Invalid CPF"', function () {
-	expect(() => new Cpf(incompleteCpf)).toThrow('Invalid CPF');
+const invalidCpfSize = [
+	'19361862456',
+	'19361862456323'
+];
+
+test.each(invalidCpfSize)('Valida o tamanho do CPF', function (cpf) {
+	expect(() => new Cpf(cpf)).toThrow('Invalid CPF');
 });
 
-test('Verificia se é possível retornar o CPF', function () {
+const validCpfs = [
+	'193.618.621-70',
+	'090.058.940-08',
+	'968.302.210-30'
+];
+
+test.each(validCpfs)('Verificia se é possível retornar o CPF', function (validCpf) {
 	const cpf = new Cpf(validCpf);
 	expect(cpf.value).toBe(validCpf);
 });
+
+test('Invalida um CPF undefined', function () {
+	expect(() => new Cpf('')).toThrow('Invalid CPF');
+})
