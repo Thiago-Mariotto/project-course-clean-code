@@ -14,4 +14,4 @@ export default class Coupon {
 		const dateNow = new Date();
 		return (this.expirationDate < dateNow) ? false : true;
 	}
-} 
+}
