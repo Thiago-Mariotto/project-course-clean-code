@@ -11,7 +11,7 @@ describe('Valida a criação de um novo pedido', function () {
 		const order = new Order('19361862170');
 		order.addItem(new Item(1, 'Mouse', 250), 1);
 		order.addItem(new Item(2, 'Teclado', 450), 1);
-		order.addItem(new Item(1, 'Monitor', 1000), 2);
+		order.addItem(new Item(3, 'Monitor', 1000), 2);
 		const total = order.getTotal();
 		expect(total).toBe(2700);
 	});
@@ -30,8 +30,19 @@ describe('Valida a criação de um novo pedido', function () {
 		expect(total).toBe(1800);
 	});
 
+	test('Não deve ser possível adicionar itens duplicados a um pedido', function () {
+		const order = new Order('19361862170');
+		order.addItem(new Item(1, 'Monitor', 1000), 2);
+		expect(() => order.addItem(new Item(1, 'Monitor', 1000), 1)).toThrow('Item has already been added');
+	});
+
+	test('não deve criar um pedido com a quantidade de itens igual a zero negativa', function () {
+		const order = new Order('19361862170');
+		expect(() => order.addItem(new Item(1, 'Monitor', 1000), -2)).toThrow(new Error('Invalid item quantity'));
+	});
+
 	test('não deve criar um pedido com cupom expirado a 1 dia ou mais', function () {
-		 const order = new Order('19361862170');
+		const order = new Order('19361862170');
 		order.addItem(new Item(1, 'Monitor', 1000), 2);
 		expect(() =>
 			order.addCoupon(new Coupon('10OFF', 10, new Date('01/01/2021'))))
