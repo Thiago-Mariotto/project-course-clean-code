@@ -15,6 +15,8 @@ export default class Order extends Cpf {
 	}
 
 	addItem(item: Item, quantity: number) {
+		const itemIsAdded = this.orderItems.find(arrayItem => arrayItem.idItem === item.idItem);
+		if (itemIsAdded) { throw new Error('Item has already been added'); }
 		this.orderItems.push(new OrderItem(item.idItem, item.price, quantity));
 	}
 
