@@ -14,5 +14,10 @@ export default class Item {
 		this.depth = depth;
 		this.height = height;
 		this.width = width;
+		if (!this.dimensionIsValid()) throw new Error('Invalid item dimension');
+	}
+
+	dimensionIsValid() {
+		return (this.depth < 0 || this.height < 0 || this.width < 0) ? false : true;
 	}
 }
