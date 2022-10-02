@@ -2,7 +2,6 @@ import Coupon from "./Coupon";
 import Cpf from "./Cpf";
 import Item from "./Item";
 import OrderItem from "./OrderItem";
-
 export default class Order extends Cpf {
 	private cpf: Cpf;
 	orderItems: OrderItem[];
@@ -15,9 +14,13 @@ export default class Order extends Cpf {
 	}
 
 	addItem(item: Item, quantity: number) {
-		const itemIsAdded = this.orderItems.find(arrayItem => arrayItem.idItem === item.idItem);
-		if (itemIsAdded) { throw new Error('Item has already been added'); }
+		this.itemIsAdded(item);
 		this.orderItems.push(new OrderItem(item.idItem, item.price, quantity));
+	}
+
+	private itemIsAdded(item: Item) {
+		const itemExits = this.orderItems.find(arrayItem => arrayItem.idItem === item.idItem);
+		if (itemExits) { throw new Error('Item has already been added'); }
 	}
 
 	addCoupon(coupon: Coupon) {
@@ -37,4 +40,3 @@ export default class Order extends Cpf {
 		return total;
 	}
 }
-

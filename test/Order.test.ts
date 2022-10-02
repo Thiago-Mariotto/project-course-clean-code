@@ -1,5 +1,5 @@
-import Coupon from "../src/Coupon";
-import Order from "../src/Order";
+import Coupon from "../src/domain/Coupon";
+import Order from "../src/domain/Order";
 
 import itemMock from './mocks/item.mock';
 
@@ -8,7 +8,7 @@ describe('Valida a criação de um novo pedido', function () {
 		expect(() => new Order('123.456.798-96')).toThrow(new Error('Invalid CPF'));
 	});
 
-	test('deve criar um pedido com 3 itens e calcular o total', function () {
+	test('deve criar um pedido com 3 itens e calcular o total do pedido', function () {
 		const order = new Order('19361862170');
 		order.addItem(itemMock.mouse, 1);
 		order.addItem(itemMock.teclado, 1);
