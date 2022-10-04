@@ -1,6 +1,7 @@
-import Coupon from "../src/domain/Coupon";
-import Order from "../src/domain/Order";
-
+import Coupon from "../src/domain/entity/Coupon";
+import Dimension from "../src/domain/entity/Dimension";
+import Item from "../src/domain/entity/Item";
+import Order from "../src/domain/entity/Order";
 import itemMock from './mocks/item.mock';
 
 describe('Valida a criação de um novo pedido', function () {
@@ -34,12 +35,12 @@ describe('Valida a criação de um novo pedido', function () {
 	test('Não deve ser possível adicionar itens duplicados a um pedido', function () {
 		const order = new Order('19361862170');
 		order.addItem(itemMock.monitor, 2);
-		expect(() => order.addItem(itemMock.monitor, 1)).toThrow('Item has already been added');
+		expect(() => order.addItem(new Item(1, 'Monitor', 1000, new Dimension(17, 17, 21, 1.2)), 1)).toThrow('Item has already been added');
 	});
 
 	test('não deve criar um pedido com a quantidade de itens igual a zero negativa', function () {
 		const order = new Order('19361862170');
-		expect(() => order.addItem(itemMock.monitor, -2)).toThrow(new Error('Invalid item quantity'));
+		expect(() => order.addItem(new Item(1, 'Monitor', 1000, new Dimension(17, 17, 21, 1.2)), -2)).toThrow(new Error('Invalid item quantity'));
 	});
 
 	test('não deve criar um pedido com cupom expirado a 1 dia ou mais', function () {
